@@ -1,5 +1,4 @@
 import {ListGroup} from 'reactstrap';
-import { isBreakStatement } from 'typescript';
 import ChatMessage from "./ChatMessage";
 /*
     ChatMessageList renders a list of all received chat messages, as a number

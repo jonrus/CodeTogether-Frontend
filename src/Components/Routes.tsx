@@ -6,6 +6,7 @@ import SignUpPage from "./SignUpPage";
 import SignInPage from "./SignInPage";
 import JoinRoomPage from "./JoinRoomPage";
 import CreateRoomPage from "./CreateRoomPage";
+import Layout from "./Layout";
 
 /*
     Router for the various routes/views
@@ -17,12 +18,11 @@ import CreateRoomPage from "./CreateRoomPage";
 export default function Routes() {
     const [isNameSet, setIsNameSet] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [roomID, setRoomID] = useState<string>("");
     const [userName, setUserName] = useState<string>("");
 
-    const handleJoinRoom = (room: string, name: string) => {
+    const handleJoinRoom = (name: string) => {
+        //Setup the persons name
         setUserName(name);
-        setRoomID(room);
     }
 
     return (
@@ -47,10 +47,8 @@ export default function Routes() {
                 <Route exact path="/create-room">
                     <CreateRoomPage />
                 </Route>
-                <Route path="/room/:id">
-                    <div>
-                        Welcome to room!
-                    </div>
+                <Route path="/room/:roomID">
+                    <Layout username={userName} isLoggedIn={isLoggedIn} />
                 </Route>
                 <Redirect to="/" />
             </Switch>

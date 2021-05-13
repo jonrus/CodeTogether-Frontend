@@ -15,7 +15,7 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
     const [formData, setFormData] = useState(DEFAULT_STATE);
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        join(formData.roomid, formData.username);
+        join(formData.username);
         setSaved(true);
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

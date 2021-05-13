@@ -1,17 +1,19 @@
+import {memo} from "react";
 /*
     ChatMessage is the component to render a single chat message
-    The parent component (blahfdljklfdsa) will render a number of these.
+    The parent component (ChatMessageList) will render a number of these.
+    The component is ran though React.memo()... Seems like a good idea.
 */
 interface ChatMessageInterface {
-    userName: string,
-    type?: string,  //!Make required
-    message: string
+    name?: string,
+    type?: string,
+    text?: string
 }
 
-export default function ChatMessage({userName, message}: ChatMessageInterface) {
-    return (
-        <li>
-            <strong>{userName}</strong>:&nbsp;{message}
-        </li>
-    )
+function ChatMessage({name, text, type}: ChatMessageInterface) {
+    return(
+        <span className={`ChatMessage-${type}`}>{text}</span>
+    );
 };
+
+export default memo(ChatMessage);

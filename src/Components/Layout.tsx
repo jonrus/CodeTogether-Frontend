@@ -20,7 +20,7 @@ interface LayoutProps {
 export default function Layout(p: LayoutProps) {
     const {roomID} = useParams<{roomID: string}>();
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
-    const chatHistory = useRef(new ChatLog());
+    const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");
@@ -64,7 +64,12 @@ export default function Layout(p: LayoutProps) {
                 <Col>EDITOR</Col>
             </Row>
             <Row>
-                <Col xs="2"><ChatPane messages={chatHistory.current} /></Col>
+                <Col xs="2">
+                    <ChatPane
+                        messages={chatHistory.current}
+                        fnSend={sendJsonMessage}
+                    />
+                </Col>
             </Row>
         </Container>
     );

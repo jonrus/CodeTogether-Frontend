@@ -10,14 +10,15 @@ interface ChatInputInterface {
     fnSendMsg: Function
 }
 
-export default function ChatInput() {
-// export default function ChatInput({fnSendMsg}: ChatInputInterface) {
+export default function ChatInput({fnSendMsg}: ChatInputInterface) {
     const [chatMsg, setChatMsg] = React.useState<string>("");
 
     const handleSumbmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // fnSendMsg(chatMsg);
-        setChatMsg("");
+        if (chatMsg !== "") {
+            fnSendMsg({type: "chat", text: chatMsg});
+            setChatMsg("");
+        }
     }
 
     const handleChage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,20 +26,22 @@ export default function ChatInput() {
     }
 
     return (
-        <Form onSubmit={handleSumbmit} id="chatInputForm" className="ChatInputForm">
-            <FormGroup>
-                {/* <Label for="chatText">Chat</Label> */}
-                <Input
-                    type="text"
-                    name="chatText"
-                    id="chatText"
-                    placeholder="Chat Message"
-                    autoComplete="off"
-                    value={chatMsg}
-                    onChange={handleChage}
-                />
-                <Button type="submit">Send</Button>
-            </FormGroup>
-        </Form>
+        <div className="ChatInput">
+            <Form onSubmit={handleSumbmit} id="chatInputForm" className="ChatInputForm">
+                <FormGroup>
+                    <Label for="chatText">Chat</Label>
+                    <Input
+                        type="text"
+                        name="chatText"
+                        id="chatText"
+                        placeholder="Chat Message"
+                        autoComplete="off"
+                        value={chatMsg}
+                        onChange={handleChage}
+                    />
+                    <Button type="submit">Send</Button>
+                </FormGroup>
+            </Form>
+        </div>
     );
 }

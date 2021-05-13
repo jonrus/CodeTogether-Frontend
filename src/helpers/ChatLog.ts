@@ -4,7 +4,7 @@
     but I had the time and wanted to have a Chat log that would be linear
     time for triming.
     Also this is not a 100% complete linked list as I will have no use for
-    removing items, or getting and item at X pos in the list.
+    removing items [by index or value], or getting an item at X pos.
     This will simply be client side storage of chat messages
 */
 interface IChatMsg {
@@ -83,6 +83,9 @@ class LinkedList<T> implements LinkedListInterface<T> {
     }
 
     private autoTrim() {
+        //allow unlimited index lists
+        if (this.trimLevel === -1) return;
+
         if (this._len > this.trimLevel) {
             if(this.head !== null) {
                 this.head = this.head.next;

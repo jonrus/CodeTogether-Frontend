@@ -26,7 +26,7 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
         }));
     }
 
-    if (saved) return (<Redirect to="/" />);
+    if (saved) return (<Redirect to={`/room/${formData.roomid}`} />);
     return (
         <div className="JoinRoomPage-Form">
             <Form onSubmit={handleSubmit}>

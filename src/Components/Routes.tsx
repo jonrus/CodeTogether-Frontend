@@ -23,7 +23,6 @@ export default function Routes() {
     const handleJoinRoom = (room: string, name: string) => {
         setUserName(name);
         setRoomID(room);
-        return (<Redirect to="/"/>)
     }
 
     return (
@@ -47,6 +46,11 @@ export default function Routes() {
                 </Route>
                 <Route exact path="/create-room">
                     <CreateRoomPage />
+                </Route>
+                <Route path="/room/:id">
+                    <div>
+                        Welcome to room!
+                    </div>
                 </Route>
                 <Redirect to="/" />
             </Switch>

@@ -4,7 +4,7 @@ import {Form, FormGroup, Label, Button, Input} from "reactstrap";
 /*
     ChatInput component
     Renders chat message input text box as well as send button
-    slash command ala irc (/slap x) //TODO ?
+    fnSendMsg is passed down from the Layout Component.
 */
 interface ChatInputInterface {
     fnSendMsg: Function
@@ -27,13 +27,13 @@ export default function ChatInput({fnSendMsg}: ChatInputInterface) {
 
     return (
         <div className="ChatInput">
-            <Form onSubmit={handleSumbmit} id="chatInputForm" className="ChatInputForm">
+            <Form onSubmit={handleSumbmit} id="chatInputForm" className="ChatInput-Form">
                 <FormGroup>
-                    <Label for="chatText">Chat</Label>
+                    <Label for="chatTextBox">Chat</Label>
                     <Input
                         type="text"
-                        name="chatText"
-                        id="chatText"
+                        name="chatTextBox"
+                        id="chatTextBox"
                         placeholder="Chat Message"
                         autoComplete="off"
                         value={chatMsg}

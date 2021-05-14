@@ -21,7 +21,6 @@ export default function Routes() {
     const [userName, setUserName] = useState<string>("");
 
     const handleJoinRoom = (name: string) => {
-        //Setup the persons name
         setUserName(name);
     }
 

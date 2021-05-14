@@ -9,7 +9,7 @@ import ChatLog from "../helpers/ChatLog";
 */
 interface IChatPane {
     messages: ChatLog,
-    fnSend: Function //
+    fnSend: Function
 }
 export default function ChatPane({messages, fnSend}: IChatPane) {
     return (

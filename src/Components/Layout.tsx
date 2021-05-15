@@ -5,6 +5,8 @@ import useWebSocket from "react-use-websocket";
 import ChatLog from "../helpers/ChatLog";
 //Child Components 
 import ChatPane from "./ChatPane";
+import RoomMembersList from "./RoomMembersList";
+import RoomMembers from "./RoomMembersList";
 
 /*
     Layout component is a wrapper for all of the sub components
@@ -21,6 +23,7 @@ export default function Layout(p: LayoutProps) {
     const {roomID} = useParams<{roomID: string}>();
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
+    const memberList = useRef<string[]>([]);
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");
@@ -42,6 +45,10 @@ export default function Layout(p: LayoutProps) {
             case "note":
                 chatHistory.current.addMsg(msgData);
                 break;
+            case "members":
+                memberList.current = msgData.names;
+                console.log(memberList.current);
+                break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
                 break;
@@ -60,7 +67,9 @@ export default function Layout(p: LayoutProps) {
     return (
         <Container fluid>
             <Row>
-                <Col xs="2">PEOPLES</Col>
+                <Col xs="2">
+                    <RoomMembersList members={memberList.current} />
+                </Col>
                 <Col>EDITOR</Col>
             </Row>
             <Row>

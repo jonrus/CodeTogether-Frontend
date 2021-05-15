@@ -6,7 +6,6 @@ import ChatLog from "../helpers/ChatLog";
 //Child Components 
 import ChatPane from "./ChatPane";
 import RoomMembersList from "./RoomMembersList";
-import RoomMembers from "./RoomMembersList";
 
 /*
     Layout component is a wrapper for all of the sub components

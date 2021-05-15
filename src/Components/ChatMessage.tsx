@@ -8,7 +8,7 @@ import "./css/ChatMessage.css";
 */
 
 interface ChatMessageInterface {
-    name?: string,
+    name?: string, //TODO Delete this prop???
     type?: string,
     text?: string
 }

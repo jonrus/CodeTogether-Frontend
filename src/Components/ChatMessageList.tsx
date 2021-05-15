@@ -11,14 +11,17 @@ interface IChatMessageList {
 }
 export default function ChatMessageList({messages}: IChatMessageList) {
     const msgs: JSX.Element[] = [];
+    let msgKey: number = 0; //Lazy method of assigning a key...
     for (let m of messages) {
-        //! Add uid for items
         msgs.push(
             <ChatMessage
+                key={msgKey}
                 text={m?.text}
                 type={m?.type}
                 name={m?.name}
             />);
+
+        msgKey++;
     }
 
     return (

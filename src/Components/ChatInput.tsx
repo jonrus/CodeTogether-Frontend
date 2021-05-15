@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, FormGroup, Label, Button, Input} from "reactstrap";
+import {Form, FormGroup, Button, Input} from "reactstrap";
 
 /*
     ChatInput component
@@ -29,7 +29,6 @@ export default function ChatInput({fnSendMsg}: ChatInputInterface) {
         <div className="ChatInput">
             <Form onSubmit={handleSumbmit} id="chatInputForm" className="ChatInput-Form">
                 <FormGroup>
-                    <Label for="chatTextBox">Chat</Label>
                     <Input
                         type="text"
                         name="chatTextBox"

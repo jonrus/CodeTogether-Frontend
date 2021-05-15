@@ -6,7 +6,9 @@ interface IRoomMember {
 
 function RoomMember({name}: IRoomMember) {
     return (
-        <li><span className="RoomMember">{name}</span></li>
+        <span className="RoomMember">
+            {name}
+        </span>
     );
 }
 

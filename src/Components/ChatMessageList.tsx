@@ -1,4 +1,5 @@
 import {ListGroup} from 'reactstrap';
+import {v4 as uuid} from "uuid";
 import ChatMessage from "./ChatMessage";
 import ChatLog from "../helpers/ChatLog";
 /*
@@ -11,22 +12,22 @@ interface IChatMessageList {
 }
 export default function ChatMessageList({messages}: IChatMessageList) {
     const msgs: JSX.Element[] = [];
-    let msgKey: number = 0; //Lazy method of assigning a key...
     for (let m of messages) {
         msgs.push(
             <ChatMessage
-                key={msgKey}
+                key={uuid()}
                 text={m?.text}
                 type={m?.type}
                 name={m?.name}
             />);
-
-        msgKey++;
     }
 
     return (
-        <ListGroup type="unstyled" className="ChatMessageList">
-            {msgs}
-        </ListGroup>
+        <div className="ChatMessageList">
+            <div className="ChatMessageList-Header">Messages</div>
+            <ListGroup type="unstyled" className="ChatMessageList-Messages">
+                {msgs}
+            </ListGroup>
+        </div>
     );
 }

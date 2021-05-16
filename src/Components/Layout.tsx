@@ -24,6 +24,8 @@ export default function Layout(p: LayoutProps) {
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
     const memberList = useRef<string[]>([]);
+    const docVersion = useRef<number>(0);
+    const docText = useRef<string>("");
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");
@@ -47,7 +49,10 @@ export default function Layout(p: LayoutProps) {
                 break;
             case "members":
                 memberList.current = msgData.names;
-                console.log(memberList.current);
+                break;
+            case "editor-Doc":
+                docVersion.current = msgData.version as number;
+                docText.current = msgData.doc;
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
@@ -82,7 +87,10 @@ export default function Layout(p: LayoutProps) {
                     />
                 </Col>
                 <Col>
-                    <Editor />
+                    <Editor
+                        version={docVersion.current}
+                        doc={docText.current}
+                    />
                 </Col>
             </Row>
         </Container>

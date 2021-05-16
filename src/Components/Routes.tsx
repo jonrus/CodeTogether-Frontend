@@ -13,7 +13,7 @@ import Layout from "./Layout";
     Also storage location of some bits of state/refs and functions to
     log in/out         //TODO
     register           //TODO
-    set visitor name   //TODO
+    set visitor name - via join room page
 */
 export default function Routes() {
     const [isNameSet, setIsNameSet] = useState<boolean>(false);
@@ -36,6 +36,12 @@ export default function Routes() {
                 </Route>
                 <Route exact path="/signin">
                     <SignInPage />
+                </Route>
+                <Route path="/join-room/:id">
+                    <JoinRoomPage
+                        join={handleJoinRoom}
+                        uName={userName}
+                    />
                 </Route>
                 <Route exact path="/join-room">
                     <JoinRoomPage

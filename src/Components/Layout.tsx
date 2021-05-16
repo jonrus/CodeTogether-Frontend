@@ -6,6 +6,7 @@ import ChatLog from "../helpers/ChatLog";
 //Child Components 
 import ChatPane from "./ChatPane";
 import RoomMembersList from "./RoomMembersList";
+import Editor from "./Editor";
 
 /*
     Layout component is a wrapper for all of the sub components
@@ -69,7 +70,9 @@ export default function Layout(p: LayoutProps) {
                 <Col xs="2">
                     <RoomMembersList members={memberList.current} />
                 </Col>
-                <Col>EDITOR</Col>
+                <Col>
+                    <h5>Editor</h5>
+                </Col>
             </Row>
             <Row>
                 <Col xs="2">
@@ -77,6 +80,9 @@ export default function Layout(p: LayoutProps) {
                         messages={chatHistory.current}
                         fnSend={sendJsonMessage}
                     />
+                </Col>
+                <Col>
+                    <Editor />
                 </Col>
             </Row>
         </Container>

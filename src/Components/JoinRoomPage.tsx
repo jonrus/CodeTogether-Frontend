@@ -10,7 +10,7 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
     const {id} = useParams<{id: string}>();
     const DEFAULT_STATE = {
         username: uName,
-        roomid: id
+        roomid: id ?? ""
     }
     const [saved, setSaved] = useState<boolean>(false);
     const [formData, setFormData] = useState(DEFAULT_STATE);

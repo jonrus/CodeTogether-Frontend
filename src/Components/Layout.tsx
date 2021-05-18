@@ -83,11 +83,16 @@ export default function Layout(p: LayoutProps) {
         return docChanges.current.slice(version);
     }
     
-    const pushUpdates = (version: number, updates: Update[]) => {
+    const pushUpdates = (version: number, fullUpdates: Update[]) => {
+        //Strip transaction data
+        const updates = fullUpdates.map(u => ({
+            clientID: u.clientID,
+            changes: u.changes.toJSON()
+        }));
+
         const data = {
             type: "editor-PushChanges",
             updates,
-            clientID: p.username,
             version
         };
         sendJsonMessage(data);
@@ -113,6 +118,7 @@ export default function Layout(p: LayoutProps) {
                 </Col>
                 <Col>
                     <Editor
+                        user={p.username}
                         version={docVersion.current}
                         doc={docText.current}
                         docReady={docLoaded.current}

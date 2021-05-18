@@ -5,6 +5,7 @@ import {collab, receiveUpdates, sendableUpdates, getSyncedVersion} from "@codemi
 import {javascript} from "@codemirror/lang-javascript"
 
 interface IEditor {
+    user: string,
     version: number,
     doc: string,
     docReady: boolean,
@@ -13,7 +14,7 @@ interface IEditor {
 }
 
 export default function Editor({
-    version, doc, docReady, fnPullUpdates, fnPushUpdates}: IEditor) {
+    user, version, doc, docReady, fnPullUpdates, fnPushUpdates}: IEditor) {
 
     const editorDOM = useRef<HTMLDivElement>(null);
 
@@ -37,15 +38,21 @@ export default function Editor({
             }
 
             update(update: ViewUpdate) {
-                if (update.docChanged) this.push();
+                if (update.docChanged) {
+                    this.push();
+                }
             }
 
             push() {
                 let updates = sendableUpdates(this.view.state);
                 if (this.pushing || !updates.length) return;
                 this.pushing = true;
+                console.log("4");
                 let version = getSyncedVersion(this.view.state);
+                console.log("5");
+                console.log(updates);
                 fnPushUpdates(version, updates);
+                console.log("6");
                 this.pushing = false;
             }
 
@@ -62,7 +69,7 @@ export default function Editor({
                 clearInterval(this.pushInterval);
             }
     })
-    return [collab({startVersion}), plugin]
+    return [collab({startVersion, clientID: user}), plugin]
 }
 
     useEffect(() => {

@@ -34,7 +34,6 @@ export default function Editor({
             }, 100);
 
             constructor(private view: EditorView) {
-                console.log(startVersion);
                 this.pull();
             }
 

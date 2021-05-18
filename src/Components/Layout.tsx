@@ -1,8 +1,11 @@
-import {useState, useRef} from "react";
+import {useRef} from "react";
 import {Redirect, useParams} from "react-router";
 import {Container, Col, Row} from "reactstrap"
 import useWebSocket from "react-use-websocket";
 import ChatLog from "../helpers/ChatLog";
+import {Update} from "@codemirror/collab";
+import {ChangeSet} from "@codemirror/state";
+
 //Child Components 
 import ChatPane from "./ChatPane";
 import RoomMembersList from "./RoomMembersList";
@@ -24,8 +27,9 @@ export default function Layout(p: LayoutProps) {
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
     const memberList = useRef<string[]>([]);
-    const docVersion = useRef<number>(0);
+    const docVersion = useRef<number>(-1); //Default to -1 for a check in Editor
     const docText = useRef<string>("");
+    const docChanges = useRef<Update[]>([]);
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");
@@ -39,8 +43,8 @@ export default function Layout(p: LayoutProps) {
     }
     const handleWsMsg = (e: WebSocketEventMap['message']) => {
         console.info(`New message: ${e.data}`);
-        const msgData = JSON.parse(e.data);
 
+        const msgData = JSON.parse(e.data);
         switch (msgData.type) {
             case "chat":
             case "join":
@@ -54,8 +58,21 @@ export default function Layout(p: LayoutProps) {
                 docVersion.current = msgData.version as number;
                 docText.current = msgData.doc;
                 break;
+            case "editor-Changes":
+                // msgData.changes.forEach((change: Update) => {
+                //     docChanges.current.push(change);
+                // });
+                console.log("Changes", docChanges.current);
+                docChanges.current = msgData.changes.map((c: any) => ({
+                    changes: ChangeSet.fromJSON(c.changes),
+                    clientID: c.clientID
+                }));
+                console.log("Changes", docChanges.current);
+                break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
+                console.error(`Unknown msg type: ${msgData.type}`);
+                console.error(`Unknown msg parsed: ${msgData}`);
                 break;
         }
     }
@@ -66,7 +83,16 @@ export default function Layout(p: LayoutProps) {
         onMessage: handleWsMsg 
     });
 
-
+    const pullUpdates = (version: number) => {
+        console.log("pullUpdate", version, docChanges.current);
+        return docChanges.current.slice(version);
+    }
+    
+    const pushUpdates = (version: number, updates: Update[]) => {
+        console.log("pushUpdates", version, updates.length, updates);
+        const data = {type: "editor-PushChanges", updates, clientID: p.username, version};
+        sendJsonMessage(data);
+    }
 
     if (!p.username) return (<Redirect to="/join-room" />);
     return (
@@ -88,8 +114,13 @@ export default function Layout(p: LayoutProps) {
                 </Col>
                 <Col>
                     <Editor
+                        user={p.username}
                         version={docVersion.current}
                         doc={docText.current}
+                        changes={docChanges.current}
+                        fnSendData={sendJsonMessage}
+                        fnPullUpdates={pullUpdates}
+                        fnPushUpdates={pushUpdates}
                     />
                 </Col>
             </Row>

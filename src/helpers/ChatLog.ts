@@ -26,7 +26,6 @@ export default class ChatLog implements IChatLog{
         this.msgList.push(data);
     }
 
-    //* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
     *[Symbol.iterator]() {
         let msg = this.msgList.first();
         while (msg !== null) {

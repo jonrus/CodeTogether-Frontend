@@ -31,9 +31,10 @@ export default function Editor({
             }, 100);
             private pushInterval = setInterval(() => {
                 this.push();
-            }, 150);
+            }, 100);
 
             constructor(private view: EditorView) {
+                console.log(startVersion);
                 this.pull();
             }
 
@@ -47,17 +48,13 @@ export default function Editor({
                 let updates = sendableUpdates(this.view.state);
                 if (this.pushing || !updates.length) return;
                 this.pushing = true;
-                console.log("4");
                 let version = getSyncedVersion(this.view.state);
-                console.log("5");
-                console.log(updates);
                 fnPushUpdates(version, updates);
-                console.log("6");
                 this.pushing = false;
             }
 
             pull() {
-                let version = getSyncedVersion(this.view.state);
+                const version = getSyncedVersion(this.view.state);
                 let updates = fnPullUpdates(version);
                 if (updates.length) {
                     this.view.dispatch(receiveUpdates(this.view.state, updates));
@@ -68,8 +65,9 @@ export default function Editor({
                 clearInterval(this.pullInterval);
                 clearInterval(this.pushInterval);
             }
+            
     })
-    return [collab({startVersion, clientID: user}), plugin]
+    return [collab({startVersion: version, clientID: user}), plugin]
 }
 
     useEffect(() => {

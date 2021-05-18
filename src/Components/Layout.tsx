@@ -68,7 +68,6 @@ export default function Layout(p: LayoutProps) {
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
-                console.error(`Unknown msg: parsed => ${msgData}`);
                 break;
         }
     }
@@ -80,7 +79,7 @@ export default function Layout(p: LayoutProps) {
     });
 
     const pullUpdates = (version: number) => {
-        return docChanges.current.slice(version);
+        return docChanges.current.slice((version - docVersion.current));
     }
     
     const pushUpdates = (version: number, fullUpdates: Update[]) => {
@@ -98,7 +97,7 @@ export default function Layout(p: LayoutProps) {
         sendJsonMessage(data);
     }
 
-    if (!p.username) return (<Redirect to="/join-room" />);
+    if (!p.username) return (<Redirect to={`/join-room/${roomID}`} />);
     return (
         <Container fluid>
             <Row>

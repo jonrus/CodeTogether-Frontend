@@ -1,6 +1,7 @@
 import {useEffect, useRef} from "react";
 import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup"
 import {ViewPlugin, ViewUpdate} from "@codemirror/view";
+import {StateEffect} from "@codemirror/state";
 import {collab, receiveUpdates, sendableUpdates, getSyncedVersion} from "@codemirror/collab";
 import {javascript} from "@codemirror/lang-javascript"
 
@@ -17,15 +18,16 @@ export default function Editor({
     user, version, doc, docReady, fnPullUpdates, fnPushUpdates}: IEditor) {
 
     const editorDOM = useRef<HTMLDivElement>(null);
-
     /*
         A custom function/class/plugin to enable collab features
         mostly pulled from the docs, with a few tweaks
         https://codemirror.net/6/examples/collab/
     */
+    
     function peerExtension(startVersion: number = 0) {
             let plugin = ViewPlugin.fromClass(class {
             private pushing = false;
+            private selection = {from: 0, to: 0};
             private pullInterval = setInterval(() => {
                 this.pull();
             }, 100);
@@ -38,6 +40,9 @@ export default function Editor({
             }
 
             update(update: ViewUpdate) {
+                if (update.selectionSet) {
+                    this.selection = update.state.selection.ranges[0];
+                }
                 if (update.docChanged) {
                     this.push();
                 }
@@ -48,7 +53,7 @@ export default function Editor({
                 if (this.pushing || !updates.length) return;
                 this.pushing = true;
                 let version = getSyncedVersion(this.view.state);
-                fnPushUpdates(version, updates);
+                fnPushUpdates(version, updates, this.selection);
                 this.pushing = false;
             }
 
@@ -66,7 +71,7 @@ export default function Editor({
             }
             
     })
-    return [collab({startVersion: version, clientID: user}), plugin]
+    return [collab({startVersion: version, clientID: user}), plugin];
 }
 
     useEffect(() => {

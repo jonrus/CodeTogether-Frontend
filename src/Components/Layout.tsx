@@ -65,6 +65,7 @@ export default function Layout(p: LayoutProps) {
                     changes: ChangeSet.fromJSON(c.changes),
                     clientID: c.clientID
                 }));
+                console.log("Cursors", msgData.cursors);
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
@@ -82,17 +83,17 @@ export default function Layout(p: LayoutProps) {
         return docChanges.current.slice((version - docVersion.current));
     }
     
-    const pushUpdates = (version: number, fullUpdates: Update[]) => {
+    const pushUpdates = (version: number, fullUpdates: Update[], cursor: {from: number, to: number}) => {
         //Strip transaction data
         const updates = fullUpdates.map(u => ({
             clientID: u.clientID,
-            changes: u.changes.toJSON()
+            changes: u.changes.toJSON(),
         }));
-
         const data = {
             type: "editor-PushChanges",
             updates,
-            version
+            version,
+            selection: {from: cursor.from, to: cursor.to}
         };
         sendJsonMessage(data);
     }
@@ -103,13 +104,6 @@ export default function Layout(p: LayoutProps) {
             <Row>
                 <Col xs="2">
                     <RoomMembersList members={memberList.current} />
-                </Col>
-                <Col>
-                    <h5>Editor</h5>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs="2">
                     <ChatPane
                         messages={chatHistory.current}
                         fnSend={sendJsonMessage}

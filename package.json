@@ -6,6 +6,7 @@
     "@codemirror/basic-setup": "^0.18.1",
     "@codemirror/collab": "^0.18.2",
     "@codemirror/lang-javascript": "^0.18.0",
+    "@codemirror/tooltip": "^0.18.4",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",

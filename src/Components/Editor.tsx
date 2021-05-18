@@ -8,15 +8,14 @@ interface IEditor {
     user: string,
     version: number,
     doc: string,
+    docReady: boolean,
     changes: Update[],
-    fnSendData: Function,
     fnPullUpdates: Function,
     fnPushUpdates: Function
 }
 
-export default function Editor({user, version, doc, changes, fnSendData, fnPullUpdates, fnPushUpdates}: IEditor) {
+export default function Editor({user, version, doc, docReady, changes, fnPullUpdates, fnPushUpdates}: IEditor) {
     const editorDOM = useRef<HTMLDivElement>(null);
-    // const intervalID = useRef<NodeJS.Timeout | null>(null);
 
     function peerExtension(startVersion: number = 0) {
         let plugin = ViewPlugin.fromClass(class {
@@ -63,7 +62,6 @@ export default function Editor({user, version, doc, changes, fnSendData, fnPullU
 
     useEffect(() => {
         if (!editorDOM.current) throw Error("editorDOM is unassigned");
-        // if (version === -1) return; //Wait until doc sent from server
 
         //Build Editor State
         const editorState = EditorState.create({
@@ -88,7 +86,7 @@ export default function Editor({user, version, doc, changes, fnSendData, fnPullU
         return () => {
             editorView.destroy();
         }
-    }, [version]);
+    }, [docReady]);
 
 
     return (

@@ -27,9 +27,10 @@ export default function Layout(p: LayoutProps) {
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
     const memberList = useRef<string[]>([]);
-    const docVersion = useRef<number>(-1); //Default to -1 for a check in Editor
+    const docVersion = useRef<number>(-1);
     const docText = useRef<string>("");
     const docChanges = useRef<Update[]>([]);
+    const docLoaded = useRef<boolean>(false);
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");
@@ -57,22 +58,17 @@ export default function Layout(p: LayoutProps) {
             case "editor-Doc":
                 docVersion.current = msgData.version as number;
                 docText.current = msgData.doc;
+                docLoaded.current = true;
                 break;
             case "editor-Changes":
-                // msgData.changes.forEach((change: Update) => {
-                //     docChanges.current.push(change);
-                // });
-                console.log("Changes", docChanges.current);
                 docChanges.current = msgData.changes.map((c: any) => ({
                     changes: ChangeSet.fromJSON(c.changes),
                     clientID: c.clientID
                 }));
-                console.log("Changes", docChanges.current);
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
-                console.error(`Unknown msg type: ${msgData.type}`);
-                console.error(`Unknown msg parsed: ${msgData}`);
+                console.error(`Unknown msg: parsed => ${msgData}`);
                 break;
         }
     }
@@ -84,13 +80,16 @@ export default function Layout(p: LayoutProps) {
     });
 
     const pullUpdates = (version: number) => {
-        console.log("pullUpdate", version, docChanges.current);
         return docChanges.current.slice(version);
     }
     
     const pushUpdates = (version: number, updates: Update[]) => {
-        console.log("pushUpdates", version, updates.length, updates);
-        const data = {type: "editor-PushChanges", updates, clientID: p.username, version};
+        const data = {
+            type: "editor-PushChanges",
+            updates,
+            clientID: p.username,
+            version
+        };
         sendJsonMessage(data);
     }
 
@@ -117,8 +116,8 @@ export default function Layout(p: LayoutProps) {
                         user={p.username}
                         version={docVersion.current}
                         doc={docText.current}
+                        docReady={docLoaded.current}
                         changes={docChanges.current}
-                        fnSendData={sendJsonMessage}
                         fnPullUpdates={pullUpdates}
                         fnPushUpdates={pushUpdates}
                     />

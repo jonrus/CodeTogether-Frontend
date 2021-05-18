@@ -1,67 +1,73 @@
 import {useEffect, useRef} from "react";
 import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup"
 import {ViewPlugin, ViewUpdate} from "@codemirror/view";
-import {collab, Update, receiveUpdates, sendableUpdates, getSyncedVersion} from "@codemirror/collab";
+import {collab, receiveUpdates, sendableUpdates, getSyncedVersion} from "@codemirror/collab";
 import {javascript} from "@codemirror/lang-javascript"
 
 interface IEditor {
-    user: string,
     version: number,
     doc: string,
     docReady: boolean,
-    changes: Update[],
     fnPullUpdates: Function,
     fnPushUpdates: Function
 }
 
-export default function Editor({user, version, doc, docReady, changes, fnPullUpdates, fnPushUpdates}: IEditor) {
+export default function Editor({
+    version, doc, docReady, fnPullUpdates, fnPushUpdates}: IEditor) {
+
     const editorDOM = useRef<HTMLDivElement>(null);
 
+    /*
+        A custom function/class/plugin to enable collab features
+        mostly pulled from the docs, with a few tweaks
+        https://codemirror.net/6/examples/collab/
+    */
     function peerExtension(startVersion: number = 0) {
-        let plugin = ViewPlugin.fromClass(class {
-        private pushing = false;
-        private done = false;
-        private pullInterval = setInterval(() => {
-            this.pull();
-        }, 200);
-        private pushInterval = setInterval(() => {
-            this.push();
-        }, 300);
+            let plugin = ViewPlugin.fromClass(class {
+            private pushing = false;
+            private pullInterval = setInterval(() => {
+                this.pull();
+            }, 100);
+            private pushInterval = setInterval(() => {
+                this.push();
+            }, 150);
 
-        constructor(private view: EditorView) { this.pull() }
-
-        update(update: ViewUpdate) {
-            if (update.docChanged) this.push()
-        }
-
-        push() {
-            let updates = sendableUpdates(this.view.state)
-            if (this.pushing || !updates.length) return
-            this.pushing = true
-            let version = getSyncedVersion(this.view.state)
-            fnPushUpdates(version, updates)
-            this.pushing = false
-        }
-
-        pull() {
-            let version = getSyncedVersion(this.view.state)
-            let updates = fnPullUpdates(version)
-            if (updates.length) {
-                this.view.dispatch(receiveUpdates(this.view.state, updates))
+            constructor(private view: EditorView) {
+                this.pull();
             }
-        }
 
-        destroy() {
-            clearInterval(this.pullInterval);
-            clearInterval(this.pushInterval);
-            this.done = true
-        }
-        })
+            update(update: ViewUpdate) {
+                if (update.docChanged) this.push();
+            }
+
+            push() {
+                let updates = sendableUpdates(this.view.state);
+                if (this.pushing || !updates.length) return;
+                this.pushing = true;
+                let version = getSyncedVersion(this.view.state);
+                fnPushUpdates(version, updates);
+                this.pushing = false;
+            }
+
+            pull() {
+                let version = getSyncedVersion(this.view.state);
+                let updates = fnPullUpdates(version);
+                if (updates.length) {
+                    this.view.dispatch(receiveUpdates(this.view.state, updates));
+                }
+            }
+
+            destroy() {
+                clearInterval(this.pullInterval);
+                clearInterval(this.pushInterval);
+            }
+    })
     return [collab({startVersion}), plugin]
 }
 
     useEffect(() => {
         if (!editorDOM.current) throw Error("editorDOM is unassigned");
+        if (!docReady) return;
 
         //Build Editor State
         const editorState = EditorState.create({
@@ -70,7 +76,6 @@ export default function Editor({user, version, doc, docReady, changes, fnPullUpd
                 basicSetup,
                 javascript(),
                 peerExtension(version)
-                // collab({clientID: user}),
             ]
         });
         
@@ -82,13 +87,15 @@ export default function Editor({user, version, doc, docReady, changes, fnPullUpd
 
         //Done with setup
         editorView.focus();
+
         //Clean up
         return () => {
+            //Important to clear the intervals of peerExtension
             editorView.destroy();
         }
     }, [docReady]);
 
-
+    //Finally return the div
     return (
         <div className="Editor" ref={editorDOM}>
         </div>

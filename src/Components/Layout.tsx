@@ -113,11 +113,9 @@ export default function Layout(p: LayoutProps) {
                 </Col>
                 <Col>
                     <Editor
-                        user={p.username}
                         version={docVersion.current}
                         doc={docText.current}
                         docReady={docLoaded.current}
-                        changes={docChanges.current}
                         fnPullUpdates={pullUpdates}
                         fnPushUpdates={pushUpdates}
                     />

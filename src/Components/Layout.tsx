@@ -21,12 +21,20 @@ interface LayoutProps {
     isLoggedIn: boolean,
     isOwner?: boolean
 }
+interface ICursorData {
+    name: string,
+    color: string,
+    from: number,
+    to: number
+}
 
 export default function Layout(p: LayoutProps) {
     const {roomID} = useParams<{roomID: string}>();
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
     const memberList = useRef<string[]>([]);
+    const memberCursors = useRef<ICursorData[]>([]);
+    const hasCursorsUpdate = useRef<boolean>(false);
     const docVersion = useRef<number>(-1);
     const docText = useRef<string>("");
     const docChanges = useRef<Update[]>([]);
@@ -43,7 +51,7 @@ export default function Layout(p: LayoutProps) {
         console.info(`Websocket closed: ${e.reason}`);
     }
     const handleWsMsg = (e: WebSocketEventMap['message']) => {
-        console.info(`New message: ${e.data}`);
+        // console.info(`New message: ${e.data}`);
 
         const msgData = JSON.parse(e.data);
         switch (msgData.type) {
@@ -65,7 +73,8 @@ export default function Layout(p: LayoutProps) {
                     changes: ChangeSet.fromJSON(c.changes),
                     clientID: c.clientID
                 }));
-                console.log("Cursors", msgData.cursors);
+                memberCursors.current = msgData.cursors;
+                hasCursorsUpdate.current = true;
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
@@ -82,8 +91,20 @@ export default function Layout(p: LayoutProps) {
     const pullUpdates = (version: number) => {
         return docChanges.current.slice((version - docVersion.current));
     }
+
+    const pullCursorUpdates = () => {
+        return memberCursors.current;
+    }
+    const hasCursorUpdates = () => {
+        if (hasCursorsUpdate.current) {
+            hasCursorsUpdate.current = false;
+            return true;
+        }
+
+        return false;
+    }
     
-    const pushUpdates = (version: number, fullUpdates: Update[], cursor: {from: number, to: number}) => {
+    const pushUpdates = (version: number, fullUpdates: Update[], cursor: {head: number, from: number, to: number}) => {
         //Strip transaction data
         const updates = fullUpdates.map(u => ({
             clientID: u.clientID,
@@ -93,7 +114,7 @@ export default function Layout(p: LayoutProps) {
             type: "editor-PushChanges",
             updates,
             version,
-            selection: {from: cursor.from, to: cursor.to}
+            selection: {head: cursor.head, from: cursor.from, to: cursor.to}
         };
         sendJsonMessage(data);
     }
@@ -117,6 +138,8 @@ export default function Layout(p: LayoutProps) {
                         docReady={docLoaded.current}
                         fnPullUpdates={pullUpdates}
                         fnPushUpdates={pushUpdates}
+                        fnPullCursors={pullCursorUpdates}
+                        fnHasCursorUpdate={hasCursorUpdates}
                     />
                 </Col>
             </Row>

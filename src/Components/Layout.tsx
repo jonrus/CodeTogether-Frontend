@@ -39,7 +39,7 @@ export default function Layout(p: LayoutProps) {
     const docText = useRef<string>("");
     const docChanges = useRef<Update[]>([]);
     const docLoaded = useRef<boolean>(false);
-    const editorComp = useRef<Function>(() => {});
+    const editorComp = useRef<Function>(() => {}); //dummy function
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");

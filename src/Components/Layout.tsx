@@ -39,6 +39,7 @@ export default function Layout(p: LayoutProps) {
     const docText = useRef<string>("");
     const docChanges = useRef<Update[]>([]);
     const docLoaded = useRef<boolean>(false);
+    const editorComp = useRef<Function>(() => {});
 
     const handleWsOpen = () => {
         console.info("Websocket Opened");
@@ -75,6 +76,7 @@ export default function Layout(p: LayoutProps) {
                 }));
                 memberCursors.current = msgData.cursors;
                 hasCursorsUpdate.current = true;
+		editorComp.current(docChanges.current);
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
@@ -88,8 +90,8 @@ export default function Layout(p: LayoutProps) {
         onMessage: handleWsMsg 
     });
 
-    const pullUpdates = (version: number) => {
-        return docChanges.current.slice((version - docVersion.current));
+    const setEditorUpdateFun = (fn: Function) => {
+    	editorComp.current = fn;
     }
 
     const pullCursorUpdates = () => {
@@ -103,7 +105,7 @@ export default function Layout(p: LayoutProps) {
 
         return false;
     }
-    
+
     const pushUpdates = (version: number, fullUpdates: Update[], cursor: {head: number, from: number, to: number}) => {
         //Strip transaction data
         const updates = fullUpdates.map(u => ({
@@ -136,7 +138,7 @@ export default function Layout(p: LayoutProps) {
                         version={docVersion.current}
                         doc={docText.current}
                         docReady={docLoaded.current}
-                        fnPullUpdates={pullUpdates}
+			fnNotifyEditor={setEditorUpdateFun}
                         fnPushUpdates={pushUpdates}
                         fnPullCursors={pullCursorUpdates}
                         fnHasCursorUpdate={hasCursorUpdates}

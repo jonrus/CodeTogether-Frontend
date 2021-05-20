@@ -3,7 +3,7 @@ import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup"
 import {ViewPlugin, ViewUpdate} from "@codemirror/view";
 import {StateField} from "@codemirror/state";
 import {Tooltip, showTooltip} from "@codemirror/tooltip";
-import {collab, receiveUpdates, sendableUpdates, getSyncedVersion} from "@codemirror/collab";
+import {collab, receiveUpdates, sendableUpdates, getSyncedVersion, Update} from "@codemirror/collab";
 import {javascript} from "@codemirror/lang-javascript"
 
 interface IEditor {
@@ -11,14 +11,14 @@ interface IEditor {
     version: number,
     doc: string,
     docReady: boolean,
-    fnPullUpdates: Function,
+    fnNotifyEditor: Function,
     fnPushUpdates: Function,
     fnHasCursorUpdate: Function,
     fnPullCursors: Function
 }
 
 export default function Editor({
-    user, version, doc, docReady, fnPullUpdates,
+    user, version, doc, docReady, fnNotifyEditor,
     fnPushUpdates, fnPullCursors, fnHasCursorUpdate
     }: IEditor) {
 
@@ -28,7 +28,7 @@ export default function Editor({
         mostly pulled from the docs, with a few tweaks
         https://codemirror.net/6/examples/collab/
     */
-    
+
         function getCursorTooltips(state: EditorState): readonly Tooltip[] {
             return fnPullCursors()
                     .filter((mem: {name: string}) => mem.name !== user)
@@ -83,17 +83,11 @@ export default function Editor({
 
     function peerExtension(startVersion: number = 0) {
             let plugin = ViewPlugin.fromClass(class {
-            private pushing = false;
-            private selection = {from: 0, to: 0};
-            private pullInterval = setInterval(() => {
-                this.pull();
-            }, 100);
-            private pushInterval = setInterval(() => {
-                this.push();
-            }, 100);
+            private selection = {from: 0, to: 0, head: 0};
 
             constructor(private view: EditorView) {
-                this.pull();
+		//Notifiy Layout we're ready to catch updates
+		fnNotifyEditor(this.catchUpdates.bind(this));
             }
 
             update(update: ViewUpdate) {
@@ -101,32 +95,26 @@ export default function Editor({
                     this.selection = update.state.selection.ranges[0];
                 }
                 if (update.docChanged) {
-                    this.push();
+                    this.pushUpdates();
                 }
             }
 
-            push() {
-                let updates = sendableUpdates(this.view.state);
-                if (this.pushing || !updates.length) return;
-                this.pushing = true;
-                let version = getSyncedVersion(this.view.state);
-                fnPushUpdates(version, updates, this.selection);
-                this.pushing = false;
-            }
+	    pushUpdates() {
+	    	const updates = sendableUpdates(this.view.state);
+		if (!updates.length) return;
+		const version = getSyncedVersion(this.view.state);
+		fnPushUpdates(version, updates, this.selection);
+	    }
 
-            pull() {
-                const version = getSyncedVersion(this.view.state);
-                let updates = fnPullUpdates(version);
-                if (updates.length) {
+	    catchUpdates(fullUpdates: Update[]) {
+		const version = getSyncedVersion(this.view.state);
+		const updates = fullUpdates.splice(version - startVersion);
+		if (updates.length) {
                     this.view.dispatch(receiveUpdates(this.view.state, updates));
-                }
-            }
+		}
+	    }
 
-            destroy() {
-                clearInterval(this.pullInterval);
-                clearInterval(this.pushInterval);
-            }
-            
+            destroy() {}
     })
     return [collab({startVersion: version, clientID: user}), plugin];
 }
@@ -146,7 +134,7 @@ export default function Editor({
                 cursorTooltipBaseTheme
             ]
         });
-        
+
         //Build the editor and attach to DOM element
         const editorView = new EditorView({
             state: editorState,

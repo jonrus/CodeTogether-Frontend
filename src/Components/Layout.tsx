@@ -76,7 +76,7 @@ export default function Layout(p: LayoutProps) {
                 }));
                 memberCursors.current = msgData.cursors;
                 hasCursorsUpdate.current = true;
-		editorComp.current(docChanges.current);
+                editorComp.current(docChanges.current);
                 break;
             default:
                 console.error(`Unknown msg: raw => ${e.data}`);
@@ -91,7 +91,7 @@ export default function Layout(p: LayoutProps) {
     });
 
     const setEditorUpdateFun = (fn: Function) => {
-    	editorComp.current = fn;
+        editorComp.current = fn;
     }
 
     const pullCursorUpdates = () => {
@@ -123,7 +123,8 @@ export default function Layout(p: LayoutProps) {
 
     if (!p.username) return (<Redirect to={`/join-room/${roomID}`} />);
     return (
-        <Container fluid>
+        // <Container fluid>
+        <Container>
             <Row>
                 <Col xs="2">
                     <RoomMembersList members={memberList.current} />
@@ -138,7 +139,7 @@ export default function Layout(p: LayoutProps) {
                         version={docVersion.current}
                         doc={docText.current}
                         docReady={docLoaded.current}
-			fnNotifyEditor={setEditorUpdateFun}
+                        fnNotifyEditor={setEditorUpdateFun}
                         fnPushUpdates={pushUpdates}
                         fnPullCursors={pullCursorUpdates}
                         fnHasCursorUpdate={hasCursorUpdates}

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useRef} from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
 import NavBar from "./NavBar";
 import AboutPage from "./AboutPage";
@@ -18,10 +18,16 @@ import Layout from "./Layout";
 export default function Routes() {
     const [isNameSet, setIsNameSet] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const userToekn = useRef<string>("");
     const [userName, setUserName] = useState<string>("");
 
     const handleJoinRoom = (name: string) => {
         setUserName(name);
+    }
+    const handleLogIn = (username: string, token: string) => {
+        setUserName(username);
+        userToekn.current = token;
+        setIsLoggedIn(true);
     }
 
     return (
@@ -35,7 +41,7 @@ export default function Routes() {
                     <SignUpPage />
                 </Route>
                 <Route exact path="/signin">
-                    <SignInPage />
+                    <SignInPage fnSignIn={handleLogIn}/>
                 </Route>
                 <Route path="/join-room/:id">
                     <JoinRoomPage

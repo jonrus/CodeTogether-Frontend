@@ -38,7 +38,7 @@ export default function Routes() {
                     <AboutPage />
                 </Route>
                 <Route exact path="/signup">
-                    <SignUpPage />
+                    <SignUpPage fnSignUp={handleLogIn}/>
                 </Route>
                 <Route exact path="/signin">
                     <SignInPage fnSignIn={handleLogIn}/>

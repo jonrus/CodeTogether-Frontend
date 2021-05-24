@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import {Redirect} from "react-router-dom";
 import {Alert} from "reactstrap";
 
 interface ILogout {

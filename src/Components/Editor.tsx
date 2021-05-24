@@ -139,7 +139,7 @@ export default function Editor({
         if (!docReady) return;
 
         //Syntax highlighing Compartment
-        const languageConf = new Compartment;
+        const languageConf = new Compartment();
         const setSyntaxLang = (lang: string) => {
             switch (lang) {
                 case "cpp":

@@ -62,7 +62,7 @@ export default function Routes() {
                     />
                 </Route>
                 <Route exact path="/create-room">
-                    <CreateRoomPage />
+                    <CreateRoomPage isLoggedIn={isLoggedIn} token={userToken.current}/>
                 </Route>
                 <Route path="/room/:roomID">
                     <Layout username={userName} isLoggedIn={isLoggedIn} />

@@ -4,7 +4,6 @@ const BASE_URL = process.env.REACT_API_URL || "http://localhost:3001";
 
 export default class ApiHelper {
     static async request({url, data = {}, method = "GET"}: AxiosRequestConfig) {
-        console.log(url);
         const params = (method === "GET") ? data : {};
         try {
             return (await axios({url, method, data, params})).data;
@@ -24,5 +23,10 @@ export default class ApiHelper {
     static async signUp(username: string, password: string) {
         const url = `${BASE_URL}/api/register`;
         return await this.request({url, data: {username, password}, method: 'post'});
+    }
+
+    static async getRoomName(token: string) {
+        const url = `${BASE_URL}/api/new-room-name`;
+        return await this.request({url, data: {token}, method: 'post'});
     }
 }

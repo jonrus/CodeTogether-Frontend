@@ -16,8 +16,8 @@ interface ISignInPage {
 export default function SignInPage({fnSignIn}: ISignInPage) {
     const login = async () => {
         try {
-            const token = await ApiHelper.logIn(formData.username, formData.password);
-            fnSignIn(formData.username, token)
+            const res = await ApiHelper.logIn(formData.username, formData.password);
+            fnSignIn(formData.username, res.token)
             setSaved(true);
         }
         catch (e){
@@ -45,7 +45,6 @@ export default function SignInPage({fnSignIn}: ISignInPage) {
             [name]: value
         }));
     }
-
 
     //INFO: Render
     if (saved) return (<Redirect to={"/create-room"} />);

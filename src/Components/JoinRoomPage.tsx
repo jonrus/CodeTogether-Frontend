@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Redirect, useParams } from "react-router";
-import {Form, FormGroup, Input, Label, Button} from "reactstrap";
+import {Container, Form, FormGroup, Input, Label, Button} from "reactstrap";
 interface JoinRoomPageProps {
     join: Function,
     uName?: string
@@ -29,8 +29,8 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
 
     if (saved) return (<Redirect to={`/room/${formData.roomid}`} />);
     return (
-        <div className="JoinRoomPage-Form">
-            <Form onSubmit={handleSubmit}>
+        <Container>
+            <Form onSubmit={handleSubmit} className="JoinRoomPage-Form">
                 {!uName &&<FormGroup>
                     <Label for="username">Username</Label>
                     <Input
@@ -83,6 +83,6 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
                 </FormGroup>}
                 <Button>Join Room!</Button>
             </Form>
-        </div>
+        </Container>
     );
 }

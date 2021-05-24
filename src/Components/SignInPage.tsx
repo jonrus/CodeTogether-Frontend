@@ -1,11 +1,18 @@
 import {useState} from "react";
 import {Redirect} from "react-router";
-import {Alert, Form, FormGroup, Input, Label, Button} from "reactstrap";
+import {Alert, Form, FormGroup, Input, Label, Button, Container, Row, Col} from "reactstrap";
 import ApiHelper from "../api/ApiHelper";
+
+/*
+    SingInPage Component
+    Allows user to sign in, via ApiHelper and pushes user data to
+    Routes component, where it can be used elsewhere.
+*/
 
 interface ISignInPage {
     fnSignIn(username: string, token: string): void
 }
+
 export default function SignInPage({fnSignIn}: ISignInPage) {
     const login = async () => {
         try {
@@ -26,6 +33,7 @@ export default function SignInPage({fnSignIn}: ISignInPage) {
     const [saved, setSaved] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
     const [formData, setFormData] = useState(DEFAULT_STATE);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         login();
@@ -38,39 +46,43 @@ export default function SignInPage({fnSignIn}: ISignInPage) {
         }));
     }
 
-    if (saved) return (<Redirect to={"/"} />);
+
+    //INFO: Render
+    if (saved) return (<Redirect to={"/create-room"} />);
     return (
         <div className="SignInPage-Form">
-            {error && <Alert color="danger">Username/Password Incorrect</Alert>}
-            <Form onSubmit={handleSubmit}>
-                <FormGroup>
-                    <Label for="username">Username</Label>
-                    <Input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Username"
-                        autoComplete="off"
-                        required
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="password">Password</Label>
-                    <Input
-                        type="password"
-                        name="password"
-                        id="password"
-                        autoComplete="off"
-                        required
-                        placeholder="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                </FormGroup>
-                <Button>Join Room!</Button>
-            </Form>
+            <Container fluid="md">
+                {error && <Alert color="danger">Username/Password Incorrect</Alert>}
+                <Form onSubmit={handleSubmit}>
+                    <FormGroup>
+                        <Label for="username">Username</Label>
+                        <Input
+                            type="text"
+                            name="username"
+                            id="username"
+                            placeholder="Username"
+                            autoComplete="off"
+                            required
+                            value={formData.username}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="password">Password</Label>
+                        <Input
+                            type="password"
+                            name="password"
+                            id="password"
+                            autoComplete="off"
+                            required
+                            placeholder="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                    <Button>Join Room!</Button>
+                </Form>
+            </Container>
         </div>
     );
 }

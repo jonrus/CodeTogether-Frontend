@@ -7,18 +7,19 @@ import SignInPage from "./SignInPage";
 import JoinRoomPage from "./JoinRoomPage";
 import CreateRoomPage from "./CreateRoomPage";
 import Layout from "./Layout";
+import Logout from "./Logout";
 
 /*
     Router for the various routes/views
     Also storage location of some bits of state/refs and functions to
-    log in/out         //TODO
-    register           //TODO
+    log in/out
+    register
     set visitor name - via join room page
 */
 export default function Routes() {
     const [isNameSet, setIsNameSet] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const userToekn = useRef<string>("");
+    const userToken = useRef<string>("");
     const [userName, setUserName] = useState<string>("");
 
     const handleJoinRoom = (name: string) => {
@@ -26,8 +27,13 @@ export default function Routes() {
     }
     const handleLogIn = (username: string, token: string) => {
         setUserName(username);
-        userToekn.current = token;
+        userToken.current = token;
         setIsLoggedIn(true);
+    }
+    const handleLogOut = () => {
+        setUserName("");
+        userToken.current = "";
+        setIsLoggedIn(false);
     }
 
     return (
@@ -60,6 +66,9 @@ export default function Routes() {
                 </Route>
                 <Route path="/room/:roomID">
                     <Layout username={userName} isLoggedIn={isLoggedIn} />
+                </Route>
+                <Route path="/logout">
+                    <Logout fnLogout={handleLogOut} />
                 </Route>
                 <Redirect to="/" />
             </Switch>

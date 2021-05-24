@@ -143,6 +143,7 @@ export default function Layout(p: LayoutProps) {
                         fnPushUpdates={pushUpdates}
                         fnPullCursors={pullCursorUpdates}
                         fnHasCursorUpdate={hasCursorUpdates}
+                        roomID={roomID}
                     />
                 </Col>
             </Row>

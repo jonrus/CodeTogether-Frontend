@@ -21,7 +21,7 @@ export default function EditorOptions({fnSetLang}: IEditorOptions) {
 
     return (
         <div className="EditorOptions">
-            <Form onSubmit={() => console.log("Hi")}>
+            <Form>
                 <FormGroup>
                     <Label for="language">Syntax</Label>
                     <Input type="select" name="language" id="language" value={settingsData.language} onChange={handleChange}>

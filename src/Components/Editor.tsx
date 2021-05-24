@@ -4,6 +4,7 @@ import {ViewPlugin, ViewUpdate} from "@codemirror/view";
 import {StateField, Compartment} from "@codemirror/state";
 import {Tooltip, showTooltip} from "@codemirror/tooltip";
 import {collab, receiveUpdates, sendableUpdates, getSyncedVersion, Update} from "@codemirror/collab";
+import {Link} from "react-router-dom";
 
 //Codemirror language servers
 import {cpp} from "@codemirror/lang-cpp";
@@ -28,12 +29,13 @@ interface IEditor {
     fnNotifyEditor: Function,
     fnPushUpdates: Function,
     fnHasCursorUpdate: Function,
-    fnPullCursors: Function
+    fnPullCursors: Function,
+    roomID: string
 }
 
 export default function Editor({
     user, version, doc, docReady, fnNotifyEditor,
-    fnPushUpdates, fnPullCursors, fnHasCursorUpdate
+    fnPushUpdates, fnPullCursors, fnHasCursorUpdate, roomID
     }: IEditor) {
 
     const editorDOM = useRef<HTMLDivElement>(null);
@@ -210,6 +212,7 @@ export default function Editor({
     //Finally return the div
     return (
         <>
+        <div className="Editor-ShareLinks">Invite others by <Link to={`/room/${roomID}`}>sharing this link!</Link></div>
         <EditorOptions fnSetLang={(lang: string) => editorChangeSyntax.current(lang)}/>
         <div className="Editor" ref={editorDOM}>
         </div>

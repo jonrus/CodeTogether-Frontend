@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import {Redirect} from "react-router-dom";
-import {Container, Row, Col, FormGroup, Form, Input, Label, Button, Jumbotron} from "reactstrap";
+import {Container, Row, Col, FormGroup, Form, Input, Label, Button} from "reactstrap";
 import ApiHelper from "../api/ApiHelper"
 
 interface ICreateRoomPage {

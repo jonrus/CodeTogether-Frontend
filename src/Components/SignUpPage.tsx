@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Redirect} from "react-router";
-import {Alert, Form, FormGroup, Input, Label, Button} from "reactstrap";
+import {Container, Alert, Form, FormGroup, Input, Label, Button} from "reactstrap";
 import ApiHelper from "../api/ApiHelper";
 
 interface ISignUpPage {
@@ -41,36 +41,38 @@ export default function SignUpPage({fnSignUp}: ISignUpPage) {
     if (saved) return (<Redirect to={"/"} />);
     return (
         <div className="SignUpPage-Form">
-            {error && <Alert color="danger">Username in use</Alert>}
-            <Form onSubmit={handleSubmit}>
-                <FormGroup>
-                    <Label for="username">Username</Label>
-                    <Input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Username"
-                        autoComplete="off"
-                        required
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="password">Password</Label>
-                    <Input
-                        type="password"
-                        name="password"
-                        id="password"
-                        autoComplete="off"
-                        required
-                        placeholder="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                </FormGroup>
-                <Button>Join Room!</Button>
-            </Form>
+            <Container fluid="md">
+                {error && <Alert color="danger">Username in use, try again!</Alert>}
+                <Form onSubmit={handleSubmit}>
+                    <FormGroup>
+                        <Label for="username">Username</Label>
+                        <Input
+                            type="text"
+                            name="username"
+                            id="username"
+                            placeholder="Username"
+                            autoComplete="off"
+                            required
+                            value={formData.username}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="password">Password</Label>
+                        <Input
+                            type="password"
+                            name="password"
+                            id="password"
+                            autoComplete="off"
+                            required
+                            placeholder="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                    <Button color="primary">Sign Up!</Button>
+                </Form>
+            </Container>
         </div>
     );
 }

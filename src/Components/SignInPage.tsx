@@ -46,7 +46,6 @@ export default function SignInPage({fnSignIn}: ISignInPage) {
         }));
     }
 
-    //INFO: Render
     if (saved) return (<Redirect to={"/create-room"} />);
     return (
         <div className="SignInPage-Form">
@@ -79,7 +78,7 @@ export default function SignInPage({fnSignIn}: ISignInPage) {
                             onChange={handleChange}
                         />
                     </FormGroup>
-                    <Button>Sign In!</Button>
+                    <Button color="primary">Sign In!</Button>
                 </Form>
             </Container>
         </div>

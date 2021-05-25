@@ -96,6 +96,7 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
                         id="roomid"
                         autoComplete="off"
                         required
+                        placeholder="room ID"
                         value={formData.roomid}
                         onChange={handleChange}
                     />

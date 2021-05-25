@@ -212,7 +212,7 @@ export default function Editor({
     //Finally return the div
     return (
         <>
-        <div className="Editor-ShareLinks">Invite others by <Link to={`/room/${roomID}`}>sharing this link!</Link></div>
+        <div className="Editor-ShareLink" style={{fontSize: "2rem", textAlign: "center"}}>Invite others by <Link to={`/room/${roomID}`}>sharing this link!</Link></div>
         <EditorOptions fnSetLang={(lang: string) => editorChangeSyntax.current(lang)}/>
         <div className="Editor" ref={editorDOM}>
         </div>

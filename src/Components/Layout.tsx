@@ -16,7 +16,7 @@ import Editor from "./Editor";
     Layout contains all websocket logic/data
 */
 
-interface LayoutProps {
+interface ILayout {
     username: string,
     isLoggedIn: boolean,
     isOwner?: boolean
@@ -28,7 +28,7 @@ interface ICursorData {
     to: number
 }
 
-export default function Layout(p: LayoutProps) {
+export default function Layout(p: ILayout) {
     const {roomID} = useParams<{roomID: string}>();
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
@@ -42,18 +42,17 @@ export default function Layout(p: LayoutProps) {
     const editorComp = useRef<Function>(() => {}); //dummy function
 
     const handleWsOpen = () => {
-        console.info("Websocket Opened");
+        //console.info("Websocket Opened");
         sendJsonMessage({type: "join", name: p.username});
     }
     const handleWsError = () => {
         console.error(`Websocket error`)
     }
     const handleWsClose = (e: WebSocketEventMap['close']) => {
-        console.info(`Websocket closed: ${e.reason}`);
+        //console.info(`Websocket closed: ${e.reason}`);
     }
     const handleWsMsg = (e: WebSocketEventMap['message']) => {
         // console.info(`New message: ${e.data}`);
-
         const msgData = JSON.parse(e.data);
         switch (msgData.type) {
             case "chat":
@@ -70,10 +69,12 @@ export default function Layout(p: LayoutProps) {
                 docLoaded.current = true;
                 break;
             case "editor-Changes":
+                //Remove some meta data created by CodeMirror/Collab plugin
                 docChanges.current = msgData.changes.map((c: any) => ({
                     changes: ChangeSet.fromJSON(c.changes),
                     clientID: c.clientID
                 }));
+
                 memberCursors.current = msgData.cursors;
                 hasCursorsUpdate.current = true;
                 editorComp.current(docChanges.current);
@@ -83,7 +84,7 @@ export default function Layout(p: LayoutProps) {
                 break;
         }
     }
-    const {sendJsonMessage, lastMessage, readyState} = useWebSocket(wsURL, {
+    const {sendJsonMessage} = useWebSocket(wsURL, {
         onOpen: handleWsOpen,
         onClose: handleWsClose,
         onError: handleWsError,

@@ -17,7 +17,6 @@ import Logout from "./Logout";
     set visitor name - via join room page
 */
 export default function Routes() {
-    const [isNameSet, setIsNameSet] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const userToken = useRef<string>("");
     const [userName, setUserName] = useState<string>("");

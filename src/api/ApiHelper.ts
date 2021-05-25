@@ -3,6 +3,11 @@ import axios, {AxiosRequestConfig} from "axios";
 const BASE_URL = process.env.REACT_API_URL || "http://127.0.0.1:3001";
 
 export default class ApiHelper {
+    /*
+        *Helper class for the frontend to work with the backend api endpoints
+        *Very little error checking is done here, as the frontend and backend
+        *will be hosted on the same server... aka 'Should be fine.'
+    */
     static async request({url, data = {}, method = "GET"}: AxiosRequestConfig) {
         const params = (method === "GET") ? data : {};
         try {
@@ -32,6 +37,11 @@ export default class ApiHelper {
 
     static async checkRoomName(room: string) {
         const url = `${BASE_URL}/api/room/${room}`;
+        return await this.request({url});
+    }
+
+    static async checkUserName(room: string, name: string) {
+        const url = `${BASE_URL}/api/room/${room}/user/${name}`;
         return await this.request({url});
     }
 }

@@ -12,24 +12,33 @@ interface JoinRoomPageProps {
 export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
     const {id} = useParams<{id: string}>();
     const DEFAULT_STATE = {
-        username: uName,
+        username: uName ?? "",
         roomid: id ?? ""
     }
     const [saved, setSaved] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false);
+    const [errorNoRoom, setErrorNoRoom] = useState<boolean>(false);
+    const [errorNameInUse, setErrorNameInUse] = useState<boolean>(false);
     const [formData, setFormData] = useState(DEFAULT_STATE);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         //Prevent guest users from creating rooms
-        const res = await ApiHelper.checkRoomName(formData.roomid);
-        if (res.isRoom === true) {
-            join(formData.username);
-            setSaved(true);
+        const validRoom = await ApiHelper.checkRoomName(formData.roomid);
+        if (validRoom.isRoom === true) {
+            //Check username if the room is valid
+            const validUsername = await ApiHelper.checkUserName(formData.roomid, formData.username);
+            if (validUsername.inUse === false) {
+                join(formData.username);
+                setSaved(true);
+            }
+            else {
+                setFormData(DEFAULT_STATE);
+                setErrorNameInUse(true);
+            }
         }
         else {
             setFormData(DEFAULT_STATE);
-            setError(true);
+            setErrorNoRoom(true);
         }
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,10 +52,14 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
     if (saved) return (<Redirect to={`/room/${formData.roomid}`} />);
     return (
         <Container>
-            {error && <div className="JoinRoomPage-Error">
+            {errorNoRoom && <div className="JoinRoomPage-Error">
             <Alert color="danger">
                 <p>Room does not exist!<br/> Check room name and try again</p>
                 <p><Link to="/signin">Sign In</Link> or <Link to="/signup">Sign Up</Link> to create your own rooms!</p>
+            </Alert></div>}
+            {errorNameInUse && <div className="JoinRoomPage-Error">
+            <Alert color="danger">
+                <p>That username is in use. Please use a new username, and try again.</p>
             </Alert></div>}
             <Form onSubmit={handleSubmit} className="JoinRoomPage-Form">
                 {!uName &&<FormGroup>

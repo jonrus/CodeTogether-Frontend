@@ -1,4 +1,12 @@
+.navbar {
+    margin-bottom: 10px;
+}
 .nav-item {
-  padding-left: 30px;
-  text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+}
+.navbar-text {
+    margin-left: auto;
+    padding-right: 15px;
 }

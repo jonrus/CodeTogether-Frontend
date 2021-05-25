@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig} from "axios";
 
-const BASE_URL = process.env.REACT_API_URL || "http://localhost:3001";
+const BASE_URL = process.env.REACT_API_URL || "http://127.0.0.1:3001";
 
 export default class ApiHelper {
     static async request({url, data = {}, method = "GET"}: AxiosRequestConfig) {
@@ -26,7 +26,12 @@ export default class ApiHelper {
     }
 
     static async getRoomName(token: string) {
-        const url = `${BASE_URL}/api/new-room-name`;
+        const url = `${BASE_URL}/api/room`;
         return await this.request({url, data: {token}, method: 'post'});
+    }
+
+    static async checkRoomName(room: string) {
+        const url = `${BASE_URL}/api/room/${room}`;
+        return await this.request({url});
     }
 }

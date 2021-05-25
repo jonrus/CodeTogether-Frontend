@@ -79,7 +79,7 @@ export default function SignInPage({fnSignIn}: ISignInPage) {
                             onChange={handleChange}
                         />
                     </FormGroup>
-                    <Button>Join Room!</Button>
+                    <Button>Sign In!</Button>
                 </Form>
             </Container>
         </div>

@@ -26,7 +26,7 @@ export default function ChatInput({fnSendMsg}: ChatInputInterface) {
     }
 
     return (
-        <div className="ChatInput">
+        <div className="ChatInput" style={{paddingTop: "5px"}}>
             <Form onSubmit={handleSumbmit} id="chatInputForm" className="ChatInput-Form">
                 <FormGroup>
                     <Input

@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Redirect} from "react-router";
-import {Alert, Form, FormGroup, Input, Label, Button, Container, Row, Col} from "reactstrap";
+import {Alert, Form, FormGroup, Input, Label, Button, Container} from "reactstrap";
 import ApiHelper from "../api/ApiHelper";
 
 /*
@@ -12,7 +12,6 @@ import ApiHelper from "../api/ApiHelper";
 interface ISignInPage {
     fnSignIn(username: string, token: string): void
 }
-
 export default function SignInPage({fnSignIn}: ISignInPage) {
     const login = async () => {
         try {

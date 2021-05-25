@@ -13,9 +13,9 @@ interface IChatPane {
 }
 export default function ChatPane({messages, fnSend}: IChatPane) {
     return (
-        <div className="ChatPane">
-            <ChatMessageList messages={messages}/>
-            <ChatInput fnSendMsg={fnSend}/>
+        <div className="ChatPane" style={{paddingTop: "10px"}}>
+            <ChatMessageList messages={messages} />
+            <ChatInput fnSendMsg={fnSend} />
         </div>
     );
 }

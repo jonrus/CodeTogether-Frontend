@@ -1,14 +1,15 @@
 import {memo} from "react";
 
 interface IRoomMember {
-    name: string
+    name: string,
+    color: string
 }
 
-function RoomMember({name}: IRoomMember) {
+function RoomMember({name, color}: IRoomMember) {
     return (
-        <span className="RoomMember">
-            {name}
-        </span>
+        <li className="RoomMember" style={{marginBottom: "6px"}}>
+            <span style={{backgroundColor: color, color: "white", padding: "4px"}}>{name}</span>
+        </li>
     );
 }
 

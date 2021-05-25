@@ -32,7 +32,7 @@ export default function Layout(p: LayoutProps) {
     const {roomID} = useParams<{roomID: string}>();
     const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
-    const memberList = useRef<string[]>([]);
+    const memberList = useRef<{name: string, color: string}[]>([]);
     const memberCursors = useRef<ICursorData[]>([]);
     const hasCursorsUpdate = useRef<boolean>(false);
     const docVersion = useRef<number>(-1);

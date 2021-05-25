@@ -24,7 +24,7 @@ export default function ChatMessageList({messages}: IChatMessageList) {
 
     return (
         <div className="ChatMessageList">
-            <div className="ChatMessageList-Header">Messages</div>
+            <div className="ChatMessageList-Header" style={{textAlign: "center", paddingBottom: "5px"}}>Messages:</div>
             <ListGroup type="unstyled" className="ChatMessageList-Messages">
                 {msgs}
             </ListGroup>

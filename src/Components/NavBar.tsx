@@ -11,10 +11,8 @@ export default function NavBar({loggedIn}: NavBarProps) {
     return (
         <div>
             <Navbar color="dark" dark expand>
-                <NavbarBrand>
-                    <NavLink tag={RRNavLink} exact to="/" className="navbar-brand">
+                <NavbarBrand tag={RRNavLink} exact to="/" style={{marginLeft: "20px"}}>
                         Code Together!
-                    </NavLink>
                 </NavbarBrand>
                 <Nav className="mr-auto" navbar>
                     <NavItem>

@@ -51,70 +51,79 @@ export default function JoinRoomPage({join, uName}: JoinRoomPageProps) {
 
     if (saved) return (<Redirect to={`/room/${formData.roomid}`} />);
     return (
-        <Container>
-            {errorNoRoom && <div className="JoinRoomPage-Error">
-            <Alert color="danger">
-                <p>Room does not exist!<br/> Check room name and try again</p>
-                <p><Link to="/signin">Sign In</Link> or <Link to="/signup">Sign Up</Link> to create your own rooms!</p>
-            </Alert></div>}
-            {errorNameInUse && <div className="JoinRoomPage-Error">
-            <Alert color="danger">
-                <p>That username is in use. Please use a new username, and try again.</p>
-            </Alert></div>}
-            <Form onSubmit={handleSubmit} className="JoinRoomPage-Form">
-                {!uName &&<FormGroup>
-                    <Label for="username">Username</Label>
-                    <Input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Username"
-                        autoComplete="off"
-                        required
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                </FormGroup>}
-                {uName &&<FormGroup>
-                    <Label for="username">Username</Label>
-                    <Input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Username"
-                        autoComplete="off"
-                        required
-                        disabled
-                        value={formData.username}
-                    />
-                </FormGroup>}
-                {!id && <FormGroup>
-                    <Label for="roomid">Room ID</Label>
-                    <Input
-                        type="text"
-                        name="roomid"
-                        id="roomid"
-                        autoComplete="off"
-                        required
-                        placeholder="room ID"
-                        value={formData.roomid}
-                        onChange={handleChange}
-                    />
-                </FormGroup>}
-                {id && <FormGroup>
-                    <Label for="roomid">Room ID</Label>
-                    <Input
-                        type="text"
-                        name="roomid"
-                        id="roomid"
-                        autoComplete="off"
-                        required
-                        disabled
-                        value={formData.roomid}
-                    />
-                </FormGroup>}
-                <Button color="primary">Join Room!</Button>
-            </Form>
-        </Container>
+        <div>
+            <Container style={{marginBottom: "20px"}}>
+                Anyone can join a room. No sign up required.
+            </Container>
+            <Container>
+                {errorNoRoom && <div className="JoinRoomPage-Error">
+                <Alert color="danger">
+                    <p>Room does not exist!<br/> Check room name and try again</p>
+                    <p><Link to="/signin">Sign In</Link> or <Link to="/signup">Sign Up</Link> to create your own rooms!</p>
+                </Alert></div>}
+                {errorNameInUse && <div className="JoinRoomPage-Error">
+                <Alert color="danger">
+                    <p>That username is in use. Please use a new username, and try again.</p>
+                </Alert></div>}
+                <Form onSubmit={handleSubmit} className="JoinRoomPage-Form">
+                    {!uName &&<FormGroup>
+                        <Label for="username">Username</Label>
+                        <Input
+                            type="text"
+                            name="username"
+                            id="username"
+                            placeholder="Username"
+                            autoComplete="off"
+                            required
+                            maxLength={20}
+                            minLength={1}
+                            value={formData.username}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>}
+                    {uName &&<FormGroup>
+                        <Label for="username">Username</Label>
+                        <Input
+                            type="text"
+                            name="username"
+                            id="username"
+                            placeholder="Username"
+                            autoComplete="off"
+                            required
+                            maxLength={20}
+                            minLength={1}
+                            disabled
+                            value={formData.username}
+                        />
+                    </FormGroup>}
+                    {!id && <FormGroup>
+                        <Label for="roomid">Room ID</Label>
+                        <Input
+                            type="text"
+                            name="roomid"
+                            id="roomid"
+                            autoComplete="off"
+                            required
+                            placeholder="room ID"
+                            value={formData.roomid}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>}
+                    {id && <FormGroup>
+                        <Label for="roomid">Room ID</Label>
+                        <Input
+                            type="text"
+                            name="roomid"
+                            id="roomid"
+                            autoComplete="off"
+                            required
+                            disabled
+                            value={formData.roomid}
+                        />
+                    </FormGroup>}
+                    <Button color="primary">Join Room!</Button>
+                </Form>
+            </Container>
+        </div>
     );
 }

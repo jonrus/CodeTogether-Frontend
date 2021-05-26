@@ -41,7 +41,10 @@ export default function SignUpPage({fnSignUp}: ISignUpPage) {
     if (saved) return (<Redirect to={"/"} />);
     return (
         <div className="SignUpPage-Form">
-            <Container fluid="md">
+            <Container style={{marginBottom: "20px"}}>
+                Sign Up is required to create rooms.
+            </Container>
+            <Container>
                 {error && <Alert color="danger">Username in use, try again!</Alert>}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
@@ -53,6 +56,8 @@ export default function SignUpPage({fnSignUp}: ISignUpPage) {
                             placeholder="Username"
                             autoComplete="off"
                             required
+                            maxLength={20}
+                            minLength={1}
                             value={formData.username}
                             onChange={handleChange}
                         />
@@ -65,6 +70,7 @@ export default function SignUpPage({fnSignUp}: ISignUpPage) {
                             id="password"
                             autoComplete="off"
                             required
+                            minLength={4}
                             placeholder="password"
                             value={formData.password}
                             onChange={handleChange}

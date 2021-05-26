@@ -1,6 +1,7 @@
 import {useState, useRef} from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
 import NavBar from "./NavBar";
+import MainPage from "./MainPage";
 import AboutPage from "./AboutPage";
 import SignUpPage from "./SignUpPage";
 import SignInPage from "./SignInPage";
@@ -68,6 +69,9 @@ export default function Routes() {
                 </Route>
                 <Route path="/logout">
                     <Logout fnLogout={handleLogOut} />
+                </Route>
+                <Route exact path="">
+                    <MainPage />
                 </Route>
                 <Redirect to="/" />
             </Switch>

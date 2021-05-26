@@ -1,6 +1,6 @@
-# README pending
-Readme will be one of the last items to be updated for this project.
-Bellow is the Create-React-App readme...
+# Code Together! - Fontend
+This is the React frontend for the [Code Together](https://github.com/jonrus/CodeTogether) project. See that repo for the full code base
+
 
 ## Available Scripts
 

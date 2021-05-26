@@ -30,7 +30,7 @@ interface ICursorData {
 
 export default function Layout(p: ILayout) {
     const {roomID} = useParams<{roomID: string}>();
-    const wsURL = `ws://127.0.0.1:3001/room/${roomID}`;
+    const wsURL = `wss://code-2gether.herokuapp.com/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
     const memberList = useRef<{name: string, color: string}[]>([]);
     const memberCursors = useRef<ICursorData[]>([]);

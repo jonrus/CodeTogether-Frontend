@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig} from "axios";
 
-const BASE_URL = process.env.REACT_API_URL || "http://127.0.0.1:3001";
+const BASE_URL = "https://code-2gether.herokuapp.com";  //"http://127.0.0.1:3001"
 
 export default class ApiHelper {
     /*

@@ -27,7 +27,7 @@ interface ICursorData {
     from: number,
     to: number
 }
-const WEBSOCKET_BASE = process.env.WEBSOCKET_URL || "ws://127.0.0.1:3001";
+const WEBSOCKET_BASE = (process.env.NODE_ENV === "test") ? "ws://127.0.0.1:3001" : "wss://code-2gether.herokuapp.com";
 
 export default function Layout(p: ILayout) {
     const {roomID} = useParams<{roomID: string}>();

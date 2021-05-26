@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig} from "axios";
 
-const BASE_URL = process.env.BACKEND_BASE_URL || "http://127.0.0.1:3001"
+const BASE_URL = (process.env.NODE_ENV === "test") ? "http://127.0.0.1:3001" : "https://code-2gether.herokuapp.com";
 
 export default class ApiHelper {
     /*

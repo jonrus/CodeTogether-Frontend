@@ -1,6 +1,5 @@
 import {Navbar, NavbarBrand, Nav, NavLink, NavItem, NavbarText} from "reactstrap";
 import {NavLink as RRNavLink} from "react-router-dom";
-import Fab from "./Fab";
 import "./css/NavBar.css"
 
 interface NavBarProps {
@@ -41,8 +40,6 @@ export default function NavBar({loggedIn}: NavBarProps) {
                     }
                 </Nav>
                 <NavbarText>
-                    <a href="https://www.linkedin.com/in/jonathantrussell/"><Fab iconDec="fab fa-linkedin fa-2x" id="Icon-NavBar-LinkedIn" /></a>&nbsp;
-                    <a href="https://github.com/jonrus/CodeTogether"><Fab iconDec="fab fa-github fa-2x" id="Icon-NavBar-Github" /></a>
                 </NavbarText>
             </Navbar>
         </div>

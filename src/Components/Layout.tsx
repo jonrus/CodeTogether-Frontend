@@ -27,10 +27,11 @@ interface ICursorData {
     from: number,
     to: number
 }
+const WEBSOCKET_BASE = process.env.WEBSOCKET_URL || "ws://127.0.0.1:3001";
 
 export default function Layout(p: ILayout) {
     const {roomID} = useParams<{roomID: string}>();
-    const wsURL = `wss://code-2gether.herokuapp.com/room/${roomID}`;
+    const wsURL = `${WEBSOCKET_BASE}/room/${roomID}`;
     const chatHistory = useRef(new ChatLog()); //* helpers/ChatLog.ts
     const memberList = useRef<{name: string, color: string}[]>([]);
     const memberCursors = useRef<ICursorData[]>([]);

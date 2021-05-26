@@ -1,5 +1,7 @@
 import {Navbar, NavbarBrand, Nav, NavLink, NavItem, NavbarText} from "reactstrap";
 import {NavLink as RRNavLink} from "react-router-dom";
+import githubIcon from "./images/github.png";
+import linkedinIcon from "./images/linkedin.png";
 import "./css/NavBar.css"
 
 interface NavBarProps {
@@ -40,6 +42,9 @@ export default function NavBar({loggedIn}: NavBarProps) {
                     }
                 </Nav>
                 <NavbarText>
+                    <a href="https://www.linkedin.com/in/jonathantrussell/"><img src={linkedinIcon} width="33" height="33" /></a>
+                    &nbsp;
+                    <a href="https://github.com/jonrus/CodeTogether"><img src={githubIcon} width="33" height="33" /></a>
                 </NavbarText>
             </Navbar>
         </div>
